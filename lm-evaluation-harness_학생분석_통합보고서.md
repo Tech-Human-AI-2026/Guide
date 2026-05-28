@@ -199,7 +199,31 @@ LLM-as-a-Judge는 정답이 하나로 고정되지 않는 태스크에 필요하
 
 이번 제출에서 상대적으로 약했던 부분이다. 향후에는 한국어 평가를 별도 축으로 다루는 것이 좋다. 예를 들어 Ko-MMLU 같은 공개 벤치마크뿐 아니라, 한국 행정문서, 학교 공지, 연구계획서, 상담 대화, 존댓말/반말 전환, 지역 문화 지식 등을 포함한 과제를 설계할 수 있다.
 
-## 6. 학생별 짧은 피드백
+## 6. 오픈소스 기여 가능성 기준 재정리
+
+학생들이 제안한 개선 방향은 대부분 오픈소스 기여 주제로 해석할 수 있다. 다만 모든 아이디어가 바로 PR 가능한 것은 아니며, 기여 난이도와 형태가 다르다. 실제 오픈소스 참여를 목표로 한다면 아래처럼 나눠 접근하는 것이 좋다.
+
+| 구분 | 기여 방향 | 학생 제안과의 연결 | 권장 산출물 |
+|---|---|---|---|
+| 문서 기여 | 재현 가능한 평가 체크리스트, prompt/template/backend 차이 설명, 결과 비교 시 주의사항 정리 | 프롬프트 민감도, 실행 환경 차이, 재현성 문제 | docs PR, README 보강, tutorial 문서 |
+| 예제 기여 | custom task, custom metric, prompt variant 평가, sample output 저장 예제 추가 | YAML 확장성, 프롬프트 강건성, 생성형 답변 평가 | examples 디렉터리 PR, notebook, small task demo |
+| 검증 도구 기여 | YAML/task lint 강화, `output_type`-metric 조합 검사, split/few-shot 오류 사전 점검 | 의미론적 YAML 검증, task 정의 오류 방지 | validator 코드 PR, 테스트 케이스 |
+| 리포팅 개선 | evaluation manifest, hardware metadata, backend 정보, seed, prompt hash, dataset revision 기록 | manifest 강제, 실행 환경 기록, 비교 가능성 강화 | 결과 JSON/YAML schema 개선 PR |
+| 평가 메트릭 확장 | LLM-as-a-Judge metric, semantic similarity, confidence interval, prompt robustness score | Exact Match 한계, 자유 생성 채점, judge 편향 | feature proposal, metric 구현 PR |
+| 실행 인프라 개선 | 진행률, ETA, GPU 메모리 표시, cache/resume 개선, vLLM/Ray/DeepSpeed 연동 문서화 | 비용, 분산 평가, 대형 모델 실행 부담 | issue 제안, backend별 실험 문서, 코드 PR |
+| 연구형 확장 | 데이터 오염 탐지, 동적 벤치마크, 에이전트 시뮬레이터, RAG 평가 환경 | Goodhart, benchmark saturation, agent/RAG 평가 | design doc, discussion issue, 별도 prototype repo |
+| 로컬/도메인 확장 | 한국어 task, 공공문서 task, 존댓말/문화 맥락 평가, Ko benchmark 연결 | 한국어·비영어권 평가 부족 | task YAML, dataset card, 평가 리포트 |
+
+기여 우선순위는 다음처럼 잡을 수 있다.
+
+1. **가장 현실적인 첫 기여:** 문서와 예제. 기존 코드 구조를 깊게 바꾸지 않아도 되며, 학생들이 분석한 재현성 문제를 바로 반영할 수 있다.
+2. **중간 난이도 기여:** YAML validator, manifest schema, 결과 리포팅 개선. 실제 사용자에게 도움이 크고, PR 단위도 비교적 명확하다.
+3. **큰 설계가 필요한 기여:** LLM-as-a-Judge, 데이터 오염 탐지, 멀티노드 평가, 에이전트 평가. 바로 구현하기보다 issue나 design proposal로 커뮤니티 논의를 시작하는 편이 적절하다.
+4. **수업/연구 프로젝트형 기여:** 한국어·공공문서·도메인 특화 벤치마크. upstream에 바로 넣기보다 작은 task pack 또는 별도 benchmark repo로 검증한 뒤 제안하는 방식이 좋다.
+
+즉, 이번 보고서의 개선 방향은 단순한 비판 목록이 아니라 `lm-evaluation-harness`에 실제로 기여할 수 있는 후보 목록이다. 학생들이 오픈소스 기여를 시도한다면 "문서/예제 -> validator/manifest -> metric/backend 확장 -> 연구형 benchmark" 순서로 난이도를 높여 가는 것이 현실적이다.
+
+## 7. 학생별 짧은 피드백
 
 | 학생 repo | 강점 | 다음 보완점 |
 |---|---|---|
@@ -213,7 +237,7 @@ LLM-as-a-Judge는 정답이 하나로 고정되지 않는 태스크에 필요하
 | `ssssihoon` | 구조적 복잡성, 분산 평가, 데이터 오염, task builder 등 사용자 경험 관점이 좋다. | 표 중심 토의 결과를 실제 `lm-evaluation-harness` 기능과 더 직접 연결하면 좋다. |
 | `yubeeeeeeeeeeeeeeeeeeen` | 기본 개념, 개발 목적, 한계, GUI 개선을 이해하기 쉽게 정리했다. | 하드웨어·정량 평가 외에도 프롬프트 민감도, 데이터 오염, LLM Judge를 추가하면 분석 폭이 넓어진다. |
 
-## 7. 전체 수업 피드백
+## 8. 전체 수업 피드백
 
 이번 제출의 좋은 점은 학생 대부분이 단순히 "좋은 평가 도구"라고 끝내지 않고, 평가의 한계와 사회적·실무적 위험까지 연결했다는 점이다. 특히 정적 벤치마크의 한계, 프롬프트 민감도, 데이터 오염, LLM-as-a-Judge의 필요성은 수업 전체가 공통 언어로 가져갈 만하다.
 
@@ -226,7 +250,7 @@ LLM-as-a-Judge는 정답이 하나로 고정되지 않는 태스크에 필요하
 
 다음 과제로 이어간다면 "분석 보고서"에서 한 단계 더 나아가, 작은 모델 하나와 작은 task 하나를 실제로 `lm-evaluation-harness`로 실행하고 manifest, prompt, output sample, 실패 로그까지 제출하게 하는 것이 좋다. 그 다음 같은 task를 prompt 변형 3개로 돌려 표준편차를 비교하게 하면, 이번 주에 말한 프롬프트 민감도와 재현성 문제가 실제로 체감될 것이다.
 
-## 8. 공유용 결론
+## 9. 공유용 결론
 
 `lm-evaluation-harness`는 LLM 평가 생태계에서 중요한 표준 도구다. 하지만 좋은 평가 도구를 쓴다고 좋은 평가가 자동으로 만들어지지는 않는다. 앞으로의 핵심은 점수 하나를 더 얻는 것이 아니라, 평가 조건을 투명하게 기록하고, 정적 벤치마크를 동적·상호작용 평가로 확장하며, 자유 생성 답변과 실제 서비스 맥락을 더 정교하게 평가하는 것이다.
 
